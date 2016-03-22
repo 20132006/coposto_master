@@ -17,6 +17,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,16 +33,32 @@ import com.coposto.Coposto.MainActivity;
 import com.coposto.R;
 import com.coposto.models.NavItem;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -137,9 +154,8 @@ public class SendFragment extends Fragment {
 								parcel_weight = ((EditText)view_real.findViewById(R.id.parcel_weight)).getText().toString();
 								parcel_price = ((EditText)view_real.findViewById(R.id.parcel_price)).getText().toString();
 
-								String method = "store_parcel_information";
 								BackgroundTask backgroundTask = new BackgroundTask(myContext);
-								backgroundTask.execute( method ,destination_from ,destination_to ,period_from ,period_to ,parcel_name ,parcel_weight ,parcel_price );
+								backgroundTask.execute( "send",destination_from ,destination_to ,period_from ,period_to ,parcel_name ,parcel_weight ,parcel_price );
 
 								view_real.setBackgroundResource(R.drawable.background_send);
 								Toast.makeText(getContext(), "Your parcel saved", Toast.LENGTH_LONG).show();
@@ -258,7 +274,7 @@ public class SendFragment extends Fragment {
 			alertDialog.setTitle("Saving Information....");
 		}
 
-		@Override
+		/*@Override
 		protected String doInBackground(String... params) {
 			String reg_url = "http://10.20.17.247/coposto/store_parcel.php";
 			String method = params[0];
@@ -299,6 +315,80 @@ public class SendFragment extends Fragment {
 
 			}
 			return null;
+		}*/
+		@Override
+		protected String doInBackground(String... params) {
+			final HttpClient httpclient = new DefaultHttpClient();
+			final HttpPost httppost = new HttpPost("http://www.coposto.com/api/send");
+			String method = params[0];
+			if (method == "send") {
+				String destination_a = params[1];
+				String destination_b = params[2];
+				String date_a = params[3];
+				String date_b = params[4];
+				String parcel_name = params[5];
+				String parcel_weight = params[6];
+				String parcel_price = params[7];
+				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(8);
+				nameValuePairs.add(new BasicNameValuePair("destination_a", destination_a));
+				nameValuePairs.add(new BasicNameValuePair("destination_b", destination_b));
+				nameValuePairs.add(new BasicNameValuePair("data_a", date_a));
+				nameValuePairs.add(new BasicNameValuePair("data_b", date_b));
+				nameValuePairs.add(new BasicNameValuePair("parcel_name", parcel_name));
+				nameValuePairs.add(new BasicNameValuePair("description", "no description"));
+				nameValuePairs.add(new BasicNameValuePair("weight", parcel_weight));
+				nameValuePairs.add(new BasicNameValuePair("price", parcel_price));
+
+				try {
+					httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+				// Execute HTTP Post Request
+				HttpResponse response = null;
+				try {
+					response = httpclient.execute(httppost);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				if ((response.getStatusLine().toString()).equals("HTTP/1.0 200 OK"))
+				{
+					BufferedReader reader = null;
+					try {
+						reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+
+					StringBuilder builder = new StringBuilder();
+					try {
+						for (String line = null; (line = reader.readLine()) != null; ) {
+							builder.append(line).append("\n");
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					JSONObject finalResult = null;
+					JSONTokener tokener = new JSONTokener(builder.toString());
+					try {
+						finalResult = new JSONObject(tokener);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+
+					String result = null;
+
+					result = "Success";
+					return result;
+				}
+				else
+				{
+					return "Ошибка при отправке.";
+				}
+
+			}
+			return null;
 		}
 
 		@Override
@@ -316,6 +406,16 @@ public class SendFragment extends Fragment {
 				((EditText)view_real.findViewById(R.id.parcel_name)).setText("");
 				((EditText)view_real.findViewById(R.id.parcel_weight)).setText("");
 				((EditText)view_real.findViewById(R.id.parcel_price)).setText("");
+
+				TextView text = (TextView) view_real.findViewById(R.id.text);
+				text.setText("Вы успешно отправили.");
+
+				Toast toast = new Toast(myContext);
+				toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+				toast.setDuration(Toast.LENGTH_LONG);
+				toast.setView(view_real);
+				toast.show();
+
 			} else {
 				alertDialog.setMessage(result);
 				alertDialog.show();
