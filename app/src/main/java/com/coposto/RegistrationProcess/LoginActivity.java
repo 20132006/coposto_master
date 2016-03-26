@@ -66,21 +66,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    /*new AlertDialog.Builder(getApplicationContext())
-            .setTitle("Do You Want To Exit From Coposto?")
-    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-        public void onClick(DialogInterface dialog, int which) {
-            int pid = android.os.Process.myPid();
-            android.os.Process.killProcess(pid);
-        }
-    })
-            .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-        public void onClick(DialogInterface dialog, int which) {
-            // do nothing
-        }
-    })
-            .setIcon(android.R.drawable.ic_dialog_alert)
-    .show();*/
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)  {
         if (Integer.parseInt(android.os.Build.VERSION.SDK) > 5
@@ -152,8 +137,6 @@ public class LoginActivity extends AppCompatActivity {
                 String login_email = params[1];
                 String login_pass = params[2];
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-                //nameValuePairs.add(new BasicNameValuePair("first_name", "Alibek"));
-                //nameValuePairs.add(new BasicNameValuePair("last_name", "TAALAIBEK UULU"));
                 nameValuePairs.add(new BasicNameValuePair("email", login_email));
                 nameValuePairs.add(new BasicNameValuePair("password", login_pass));
                 try {

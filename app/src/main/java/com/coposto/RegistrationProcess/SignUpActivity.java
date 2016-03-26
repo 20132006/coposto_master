@@ -224,7 +224,7 @@ public class SignUpActivity extends Activity {
                 String email = params[3];
                 String password = params[4];
 
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
                 nameValuePairs.add(new BasicNameValuePair("first_name", first_name));
                 nameValuePairs.add(new BasicNameValuePair("last_name", last_name));
                 nameValuePairs.add(new BasicNameValuePair("email", email));

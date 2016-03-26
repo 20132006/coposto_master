@@ -21,6 +21,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -146,16 +147,16 @@ public class SendFragment extends Fragment {
 						.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int which) {
 
-								destination_from = ((EditText)view_real.findViewById(R.id.destination_from)).getText().toString();
-								destination_to = ((EditText)view_real.findViewById(R.id.destination_to)).getText().toString();
-								period_from = ((EditText)view_real.findViewById(R.id.period_from)).getText().toString();
-								period_to = ((EditText)view_real.findViewById(R.id.period_to)).getText().toString();
-								parcel_name = ((EditText)view_real.findViewById(R.id.parcel_name)).getText().toString();
-								parcel_weight = ((EditText)view_real.findViewById(R.id.parcel_weight)).getText().toString();
-								parcel_price = ((EditText)view_real.findViewById(R.id.parcel_price)).getText().toString();
+								destination_from = ((EditText) view_real.findViewById(R.id.destination_from)).getText().toString();
+								destination_to = ((EditText) view_real.findViewById(R.id.destination_to)).getText().toString();
+								period_from = ((EditText) view_real.findViewById(R.id.period_from)).getText().toString();
+								period_to = ((EditText) view_real.findViewById(R.id.period_to)).getText().toString();
+								parcel_name = ((EditText) view_real.findViewById(R.id.parcel_name)).getText().toString();
+								parcel_weight = ((EditText) view_real.findViewById(R.id.parcel_weight)).getText().toString();
+								parcel_price = ((EditText) view_real.findViewById(R.id.parcel_price)).getText().toString();
 
 								BackgroundTask backgroundTask = new BackgroundTask(myContext);
-								backgroundTask.execute( "send",destination_from ,destination_to ,period_from ,period_to ,parcel_name ,parcel_weight ,parcel_price );
+								backgroundTask.execute("send", destination_from, destination_to, period_from, period_to, parcel_name, parcel_weight, parcel_price);
 
 								view_real.setBackgroundResource(R.drawable.background_send);
 								Toast.makeText(getContext(), "Your parcel saved", Toast.LENGTH_LONG).show();
@@ -182,6 +183,14 @@ public class SendFragment extends Fragment {
 				startActivityForResult(i, RESULT_LOAD_IMAGE);
 			}
 		});
+
+		String[] cities_ru;
+
+		AutoCompleteTextView autoCompleteTextView_goingFrom;
+		AutoCompleteTextView autoCompleteTextView_destinationFrom;
+
+		autoCompleteTextView_goingFrom = (AutoCompleteTextView) view_real.findViewById(R.id.going_from);
+		autoCompleteTextView_destinationFrom = (AutoCompleteTextView) view_real.findViewById(R.id.destination_from);
 
 		return view_real;
 	}
@@ -273,49 +282,6 @@ public class SendFragment extends Fragment {
 			alertDialog = new AlertDialog.Builder(ctx).create();
 			alertDialog.setTitle("Saving Information....");
 		}
-
-		/*@Override
-		protected String doInBackground(String... params) {
-			String reg_url = "http://10.20.17.247/coposto/store_parcel.php";
-			String method = params[0];
-			if (method == "store_parcel_information") {
-				String name = params[1];
-				String user_name = params[2];
-				String user_pass = params[3];
-				try {
-					URL url = new URL(reg_url);
-					HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-					httpURLConnection.setRequestMethod("POST");
-					httpURLConnection.setDoOutput(true);
-
-					//httpURLConnection.setDoInput(true);
-					OutputStream OS = httpURLConnection.getOutputStream();
-					BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(OS, "UTF-8"));
-					String data = 	URLEncoder.encode("destination_from", "UTF-8") + "=" + URLEncoder.encode(destination_from, "UTF-8") + "&" +
-									URLEncoder.encode("destination_to", "UTF-8") + "=" + URLEncoder.encode(destination_to, "UTF-8") + "&" +
-									URLEncoder.encode("period_from", "UTF-8") + "=" + URLEncoder.encode(period_from, "UTF-8") + "&" +
-									URLEncoder.encode("period_to", "UTF-8") + "=" + URLEncoder.encode(period_to, "UTF-8") + "&" +
-									URLEncoder.encode("parcel_name", "UTF-8") + "=" + URLEncoder.encode(parcel_name, "UTF-8") + "&" +
-									URLEncoder.encode("parcel_weight", "UTF-8") + "=" + URLEncoder.encode(parcel_weight, "UTF-8") + "&" +
-									URLEncoder.encode("parcel_price", "UTF-8") + "=" + URLEncoder.encode(parcel_price, "UTF-8");
-					bufferedWriter.write(data);
-					bufferedWriter.flush();
-					bufferedWriter.close();
-					OS.close();
-					InputStream IS = httpURLConnection.getInputStream();
-					IS.close();
-					//httpURLConnection.connect();
-					httpURLConnection.disconnect();
-					return "Storing Success...";
-				} catch (MalformedURLException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-			}
-			return null;
-		}*/
 		@Override
 		protected String doInBackground(String... params) {
 			final HttpClient httpclient = new DefaultHttpClient();
