@@ -2,8 +2,10 @@ package com.coposto.Coposto;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +36,9 @@ import com.coposto.fragments.MyProfile;
 import com.coposto.fragments.MySettings;
 import com.coposto.models.NavItem;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         listNavItems.add(new NavItem("Settings", "Change something", R.drawable.setting_icon));
         listNavItems.add(new NavItem("About", "Author's information", R.drawable.about_icon));
         listNavItems.add(new NavItem("Profile", "MyProfile information", R.drawable.profile_icon));
-        //listNavItems.add(new NavItem("Login", "Login page", R.drawable.login_icon));
+        listNavItems.add(new NavItem("Logut", "Login page", R.drawable.login_icon));
         //listNavItems.add(new NavItem("Sign Up", "Sign Up page", R.drawable.signup_icon));
         NavListAdapter navListAdapter = new NavListAdapter(getApplicationContext(), R.layout.item_nav_list, listNavItems);
 
@@ -221,7 +226,6 @@ public class MainActivity extends AppCompatActivity {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

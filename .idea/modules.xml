@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Coposto.iml" filepath="$PROJECT_DIR$/Coposto.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/coposto_master.iml" filepath="$PROJECT_DIR$/coposto_master.iml" />
     </modules>
   </component>
 </project>

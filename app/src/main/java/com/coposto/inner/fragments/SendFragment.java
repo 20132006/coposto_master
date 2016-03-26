@@ -21,6 +21,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -186,12 +187,16 @@ public class SendFragment extends Fragment {
 
 		String[] cities_ru;
 
-		AutoCompleteTextView autoCompleteTextView_goingFrom;
+		AutoCompleteTextView autoCompleteTextView_destinationTo;
 		AutoCompleteTextView autoCompleteTextView_destinationFrom;
 
-		autoCompleteTextView_goingFrom = (AutoCompleteTextView) view_real.findViewById(R.id.going_from);
+		autoCompleteTextView_destinationTo = (AutoCompleteTextView) view_real.findViewById(R.id.destination_to);
 		autoCompleteTextView_destinationFrom = (AutoCompleteTextView) view_real.findViewById(R.id.destination_from);
 
+		cities_ru = getResources().getStringArray(R.array.country_and_city);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(inflater.getContext(),android.R.layout.simple_list_item_activated_1,cities_ru);
+		autoCompleteTextView_destinationFrom.setAdapter(adapter);
+		autoCompleteTextView_destinationTo.setAdapter(adapter);
 		return view_real;
 	}
 
